@@ -6,8 +6,8 @@
     <meta name="description" content="Advances in Neural Network Architecture - Latest research from SCML Group">
     <title>Advances in Neural Network Architecture - SCML Group</title>
     <link rel="stylesheet" href="../assets/css/styles.css">
-    <!-- Marked.js for Markdown parsing -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Marked.js for Markdown parsing - using HTTPS and local fallback -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js" integrity="sha384-y23oWIKRY6MAoq3SoTrL7GmFSz/nt24XUszN6Yh5DkXv2oS39Rf2LCl3jhx5EwW" crossorigin="anonymous"></script>
     <!-- MathJax Configuration -->
     <script>
         window.MathJax = {
@@ -166,6 +166,22 @@
             margin: 1.5rem 0;
         }
         
+        /* Loading state */
+        .markdown-loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--color-text-muted);
+        }
+        
+        .markdown-error {
+            background-color: #fee;
+            border: 1px solid #fcc;
+            color: #c33;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .markdown-content h1 {
@@ -265,7 +281,7 @@
                         <div class="article__body">
                             <!-- Markdown content container -->
                             <div id="markdown-content" class="markdown-content">
-                                <!-- Markdown content will be loaded here -->
+                                <div class="markdown-loading">Loading content...</div>
                             </div>
                         </div>
 
@@ -515,39 +531,80 @@ Future research directions include:
 
 *This research was supported by the SCML Group and our collaborative partners in the AI research community.*`;
 
+        // Simple markdown parser fallback if marked.js fails to load
+        function simpleMarkdownParser(text) {
+            return text
+                .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+                .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+                .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+                .replace(/\*\*(.*)\*\*/gim, '<strong>$1</strong>')
+                .replace(/\*(.*)\*/gim, '<em>$1</em>')
+                .replace(/```([\s\S]*?)```/gim, '<pre><code>$1</code></pre>')
+                .replace(/`([^`]+)`/gim, '<code>$1</code>')
+                .replace(/\n\n/gim, '</p><p>')
+                .replace(/^<p>/, '')
+                .replace(/<\/p>$/, '')
+                .replace(/^- (.*$)/gim, '<li>$1</li>')
+                .replace(/^(\d+)\. (.*$)/gim, '<li>$2</li>')
+                .replace(/(<li>.*<\/li>)/gim, '<ul>$1</ul>')
+                .replace(/> (.*$)/gim, '<blockquote>$1</blockquote>');
+        }
+
         // Configure marked.js for better rendering
-        marked.setOptions({
-            breaks: true,
-            gfm: true,
-            headerIds: true,
-            mangle: false
-        });
+        function configureMarked() {
+            if (typeof marked !== 'undefined') {
+                marked.setOptions({
+                    breaks: true,
+                    gfm: true,
+                    headerIds: true,
+                    mangle: false
+                });
+                return true;
+            }
+            return false;
+        }
 
         // Function to render markdown content
         function renderMarkdown() {
             const markdownContainer = document.getElementById('markdown-content');
-            if (markdownContainer) {
-                try {
-                    // Render markdown to HTML
-                    const htmlContent = marked.parse(markdownContent);
-                    markdownContainer.innerHTML = htmlContent;
-                    
-                    // Trigger MathJax to process the new content
-                    if (window.MathJax) {
-                        MathJax.typesetPromise([markdownContainer]).catch((err) => {
-                            console.error('MathJax error:', err);
-                        });
-                    }
-                } catch (error) {
-                    console.error('Error rendering markdown:', error);
-                    markdownContainer.innerHTML = '<p>Error rendering content. Please check the console for details.</p>';
+            if (!markdownContainer) {
+                console.error('Markdown container not found');
+                return;
+            }
+
+            try {
+                let htmlContent;
+                
+                // Try to use marked.js first
+                if (configureMarked()) {
+                    htmlContent = marked.parse(markdownContent);
+                } else {
+                    // Fallback to simple parser
+                    console.warn('Marked.js not available, using fallback parser');
+                    htmlContent = simpleMarkdownParser(markdownContent);
                 }
+                
+                markdownContainer.innerHTML = htmlContent;
+                
+                // Trigger MathJax to process the new content
+                if (window.MathJax && window.MathJax.typesetPromise) {
+                    MathJax.typesetPromise([markdownContainer]).catch((err) => {
+                        console.error('MathJax error:', err);
+                    });
+                } else {
+                    console.warn('MathJax not available for math rendering');
+                }
+                
+            } catch (error) {
+                console.error('Error rendering markdown:', error);
+                markdownContainer.innerHTML = '<div class="markdown-error">Error rendering content. Please check the console for details.</div>';
             }
         }
 
         // Load markdown content when page loads
         document.addEventListener('DOMContentLoaded', function() {
-            renderMarkdown();
+            // Add a small delay to ensure all scripts are loaded
+            setTimeout(renderMarkdown, 100);
             
             // Mobile navigation toggle
             const navToggle = document.querySelector('.nav__toggle');
@@ -565,6 +622,9 @@ Future research directions include:
         async function loadMarkdownFromFile(filename) {
             try {
                 const response = await fetch(filename);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
                 const markdown = await response.text();
                 return markdown;
             } catch (error) {
