@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Advances in Neural Network Architecture - Latest research from SCML Group">
+    <title>Advances in Neural Network Architecture - SCML Group</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <!-- Marked.js for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        /* Markdown content styles */
+        .markdown-content {
+            line-height: 1.6;
+            color: var(--color-text);
+        }
+        
+        .markdown-content h1,
+        .markdown-content h2,
+        .markdown-content h3,
+        .markdown-content h4,
+        .markdown-content h5,
+        .markdown-content h6 {
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+        
+        .markdown-content h1 {
+            font-size: 2.5rem;
+            border-bottom: 2px solid var(--color-primary);
+            padding-bottom: 0.5rem;
+        }
+        
+        .markdown-content h2 {
+            font-size: 2rem;
+            color: var(--color-primary);
+        }
+        
+        .markdown-content h3 {
+            font-size: 1.5rem;
+        }
+        
+        .markdown-content h4 {
+            font-size: 1.25rem;
+        }
+        
+        .markdown-content p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .markdown-content ul,
+        .markdown-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+        
+        .markdown-content li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .markdown-content blockquote {
+            border-left: 4px solid var(--color-primary);
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+            font-style: italic;
+            background-color: var(--color-background-light);
+            padding: 1.5rem;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .markdown-content code {
+            background-color: var(--color-background-light);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .markdown-content pre {
+            background-color: var(--color-text);
+            color: var(--color-background);
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 2rem 0;
+        }
+        
+        .markdown-content pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+        }
+        
+        .markdown-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background-color: var(--color-background-light);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .markdown-content th,
+        .markdown-content td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--color-border);
+        }
+        
+        .markdown-content th {
+            background-color: var(--color-primary);
+            color: white;
+            font-weight: 600;
+        }
+        
+        .markdown-content tr:hover {
+            background-color: rgba(44, 90, 160, 0.1);
+        }
+        
+        .markdown-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 2rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .markdown-content a {
+            color: var(--color-primary);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-bottom-color 0.3s ease;
+        }
+        
+        .markdown-content a:hover {
+            border-bottom-color: var(--color-primary);
+        }
+        
+        .markdown-content hr {
+            border: none;
+            height: 2px;
+            background-color: var(--color-border);
+            margin: 3rem 0;
+        }
+        
+        .markdown-content .math {
+            margin: 1.5rem 0;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .markdown-content h1 {
+                font-size: 2rem;
+            }
+            
+            .markdown-content h2 {
+                font-size: 1.75rem;
+            }
+            
+            .markdown-content h3 {
+                font-size: 1.4rem;
+            }
+            
+            .markdown-content pre {
+                padding: 1rem;
+                font-size: 0.9em;
+            }
+            
+            .markdown-content table {
+                font-size: 0.9em;
+            }
+            
+            .markdown-content th,
+            .markdown-content td {
+                padding: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav__container">
+            <div class="nav__logo">
+                <a href="../index.html" class="nav__logo-link">
+                    <span class="nav__logo-text">SCML</span>
+                </a>
+            </div>
+            <button class="nav__toggle" aria-label="Toggle navigation menu">
+                <span class="nav__toggle-line"></span>
+                <span class="nav__toggle-line"></span>
+                <span class="nav__toggle-line"></span>
+            </button>
+            <ul class="nav__menu">
+                <li class="nav__item">
+                    <a href="../index.html" class="nav__link">Home</a>
+                </li>
+                <li class="nav__item">
+                    <a href="../events/index.html" class="nav__link">Events</a>
+                </li>
+                <li class="nav__item">
+                    <a href="index.html" class="nav__link nav__link--active">Blog</a>
+                </li>
+                <li class="nav__item">
+                    <a href="../members/index.html" class="nav__link">Members</a>
+                </li>
+                <li class="nav__item">
+                    <a href="../gallery/index.html" class="nav__link">Gallery</a>
+                </li>
+                <li class="nav__item">
+                    <a href="../about-contact.html" class="nav__link">About & Contact</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Article Header -->
+        <section class="article-header">
+            <div class="container">
+                <div class="article-header__meta">
+                    <span class="article-header__author">By Dr. Jane Doe</span>
+                    <span class="article-header__date">December 10, 2024</span>
+                    <span class="article-header__category">Research</span>
+                    <span class="article-header__read-time">8 min read</span>
+                </div>
+                <h1 class="article-header__title">Advances in Neural Network Architecture</h1>
+                <p class="article-header__subtitle">
+                    Exploring the latest developments in transformer models and their applications in natural language processing
+                </p>
+            </div>
+        </section>
+
+        <!-- Article Content -->
+        <section class="article-content">
+            <div class="container">
+                <div class="article-content__wrapper">
+                    <article class="article">
+                        <div class="article__image">
+                            <div class="article__placeholder">
+                                <span class="article__placeholder-text">Neural Networks</span>
+                            </div>
+                        </div>
+
+                        <div class="article__body">
+                            <!-- Markdown content container -->
+                            <div id="markdown-content" class="markdown-content">
+                                <!-- Markdown content will be loaded here -->
+                            </div>
+                        </div>
+
+                        <!-- Article Tags -->
+                        <div class="article__tags">
+                            <h3 class="article__tags-title">Tags:</h3>
+                            <div class="article__tags-list">
+                                <a href="#" class="article__tag">Neural Networks</a>
+                                <a href="#" class="article__tag">Transformers</a>
+                                <a href="#" class="article__tag">Attention Mechanisms</a>
+                                <a href="#" class="article__tag">Natural Language Processing</a>
+                                <a href="#" class="article__tag">Machine Learning</a>
+                            </div>
+                        </div>
+
+                        <!-- Article Author -->
+                        <div class="article__author">
+                            <div class="article__author-avatar">
+                                <div class="article__author-placeholder">JD</div>
+                            </div>
+                            <div class="article__author-info">
+                                <h3 class="article__author-name">Dr. Jane Doe</h3>
+                                <p class="article__author-bio">
+                                    Senior Research Scientist specializing in neural network architectures and natural language processing.
+                                    Dr. Doe has published over 50 papers in top-tier conferences and journals.
+                                </p>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Sidebar -->
+                    <aside class="article-sidebar">
+                        <div class="article-sidebar__section">
+                            <h3 class="article-sidebar__title">Related Articles</h3>
+                            <ul class="article-sidebar__list">
+                                <li class="article-sidebar__item">
+                                    <a href="#" class="article-sidebar__link">Federated Learning: Privacy-Preserving AI</a>
+                                </li>
+                                <li class="article-sidebar__item">
+                                    <a href="#" class="article-sidebar__link">Explainable AI: Making Machine Learning Transparent</a>
+                                </li>
+                                <li class="article-sidebar__item">
+                                    <a href="#" class="article-sidebar__link">Recent Advances in Computer Vision</a>
+                                </li>
+                                <li class="article-sidebar__item">
+                                    <a href="#" class="article-sidebar__link">The Evolution of Language Models</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="article-sidebar__section">
+                            <h3 class="article-sidebar__title">Categories</h3>
+                            <ul class="article-sidebar__list">
+                                <li class="article-sidebar__item">
+                                    <a href="#" class="article-sidebar__link">Research (15)</a>
+                                </li>
+                                <li class="article-sidebar__item">
+                                    <a href="#" class="article-sidebar__link">Privacy (8)</a>
+                                </li>
+                                <li class="article-sidebar__item">
+                                    <a href="#" class="article-sidebar__link">Explainability (12)</a>
+                                </li>
+                                <li class="article-sidebar__item">
+                                    <a href="#" class="article-sidebar__link">Computer Vision (10)</a>
+                                </li>
+                                <li class="article-sidebar__item">
+                                    <a href="#" class="article-sidebar__link">Natural Language Processing (18)</a>
+                                </li>
+                                <li class="article-sidebar__item">
+                                    <a href="#" class="article-sidebar__link">AI Ethics (6)</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="article-sidebar__section">
+                            <h3 class="article-sidebar__title">Subscribe</h3>
+                            <p class="article-sidebar__text">
+                                Get notified when we publish new articles about machine learning and AI research.
+                            </p>
+                            <form class="article-sidebar__form">
+                                <input type="email" placeholder="Enter your email" class="article-sidebar__input" required>
+                                <button type="submit" class="article-sidebar__button">Subscribe</button>
+                            </form>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__grid">
+                <div class="footer__section">
+                    <h3 class="footer__title">SCML Group</h3>
+                    <p class="footer__description">
+                        Advancing research in Soft Computing and Machine Learning through innovation and collaboration.
+                    </p>
+                </div>
+                <div class="footer__section">
+                    <h3 class="footer__title">Quick Links</h3>
+                    <ul class="footer__links">
+                        <li><a href="../events/index.html" class="footer__link">Events</a></li>
+                        <li><a href="index.html" class="footer__link">Blog</a></li>
+                        <li><a href="../members/index.html" class="footer__link">Members</a></li>
+                        <li><a href="../gallery/index.html" class="footer__link">Gallery</a></li>
+                        <li><a href="../about-contact.html" class="footer__link">About & Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer__section">
+                    <h3 class="footer__title">Contact</h3>
+                    <p class="footer__contact">
+                        Email: <a href="mailto:info@scml-group.org" class="footer__link">info@scml-group.org</a><br>
+                        Address: Research Building, University Campus
+                    </p>
+                </div>
+                <div class="footer__section">
+                    <h3 class="footer__title">Follow Us</h3>
+                    <div class="footer__social">
+                        <a href="#" class="footer__social-link" aria-label="Twitter">
+                            <span class="footer__social-icon">𝕏</span>
+                        </a>
+                        <a href="#" class="footer__social-link" aria-label="LinkedIn">
+                            <span class="footer__social-icon">in</span>
+                        </a>
+                        <a href="#" class="footer__social-link" aria-label="GitHub">
+                            <span class="footer__social-icon">GitHub</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__copyright">&copy; 2024 SCML Group. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sample Markdown content - you can replace this with actual markdown files
+        const markdownContent = `# Advances in Neural Network Architecture
+
+The field of neural network architecture has witnessed remarkable progress in recent years, particularly in the domain of transformer models. This comprehensive review examines the latest developments and their implications for artificial intelligence research.
+
+## Introduction to Transformer Architecture
+
+The transformer architecture, introduced in the seminal paper "Attention Is All You Need," has revolutionized natural language processing. The key innovation lies in the self-attention mechanism, which allows the model to weigh the importance of different words in a sequence.
+
+The attention mechanism can be mathematically expressed as:
+
+$$\\text{Attention}(Q, K, V) = \\text{softmax}\\left(\\frac{QK^T}{\\sqrt{d_k}}\\right)V$$
+
+Where $Q$, $K$, and $V$ represent the query, key, and value matrices respectively, and $d_k$ is the dimension of the key vectors.
+
+## Multi-Head Attention
+
+Multi-head attention allows the model to attend to information from different representation subspaces at different positions. The computation can be expressed as:
+
+$$\\text{MultiHead}(Q, K, V) = \\text{Concat}(\\text{head}_1, \\ldots, \\text{head}_h)W^O$$
+
+Where each head is computed as:
+
+$$\\text{head}_i = \\text{Attention}(QW_i^Q, KW_i^K, VW_i^V)$$
+
+## Positional Encoding
+
+Since transformers process sequences in parallel, they require positional information to understand the order of elements. The positional encoding is added to the input embeddings:
+
+$$PE_{(pos, 2i)} = \\sin(pos / 10000^{2i/d_{model}})$$
+
+$$PE_{(pos, 2i+1)} = \\cos(pos / 10000^{2i/d_{model}})$$
+
+Where $pos$ is the position and $i$ is the dimension.
+
+## Recent Advances
+
+Recent research has focused on improving the efficiency and scalability of transformer models. One notable advancement is the introduction of sparse attention mechanisms, which reduce computational complexity from $O(n^2)$ to $O(n \\log n)$ or even $O(n)$.
+
+The efficiency improvement can be quantified using the following relationship:
+
+$$\\text{Complexity} = O\\left(\\frac{n^2}{s}\\right)$$
+
+Where $s$ represents the sparsity factor and $n$ is the sequence length.
+
+## Model Scaling Laws
+
+Research has shown that model performance follows predictable scaling laws. The loss can be modeled as a power law function of model size:
+
+$$L(N) = L_0 + \\frac{A}{N^\\alpha}$$
+
+Where $N$ is the number of parameters, $L_0$ is the irreducible loss, and $\\alpha$ is the scaling exponent, typically around 0.076.
+
+## Code Example
+
+Here's a simple implementation of the attention mechanism:
+
+\`\`\`python
+import torch
+import torch.nn.functional as F
+
+def attention(query, key, value, mask=None):
+    """
+    Compute scaled dot-product attention.
+    
+    Args:
+        query: Query tensor of shape (batch_size, seq_len, d_k)
+        key: Key tensor of shape (batch_size, seq_len, d_k)
+        value: Value tensor of shape (batch_size, seq_len, d_v)
+        mask: Optional mask tensor
+    
+    Returns:
+        Attention output and attention weights
+    """
+    d_k = query.size(-1)
+    scores = torch.matmul(query, key.transpose(-2, -1)) / math.sqrt(d_k)
+    
+    if mask is not None:
+        scores = scores.masked_fill(mask == 0, -1e9)
+    
+    attention_weights = F.softmax(scores, dim=-1)
+    output = torch.matmul(attention_weights, value)
+    
+    return output, attention_weights
+\`\`\`
+
+## Key Features
+
+- **Self-Attention**: Allows models to focus on relevant parts of the input
+- **Parallelization**: Unlike RNNs, transformers can process sequences in parallel
+- **Scalability**: Can handle long sequences effectively
+- **Flexibility**: Applicable to various tasks beyond NLP
+
+## Conclusion
+
+The transformer architecture continues to evolve, with new variants and improvements being developed regularly. These advances are enabling more efficient and powerful language models that can tackle increasingly complex tasks.
+
+Future research directions include:
+
+1. **Efficient Attention**: Exploring more efficient attention mechanisms
+2. **Training Strategies**: Developing better training strategies
+3. **Theoretical Foundations**: Investigating the theoretical foundations of these models
+4. **Multimodal Applications**: Extending transformers to handle multiple data types
+
+> **Note**: This article provides a high-level overview. For detailed implementations and experiments, refer to the original papers and open-source implementations.
+
+---
+
+*This research was supported by the SCML Group and our collaborative partners in the AI research community.*`;
+
+        // Configure marked.js for better rendering
+        marked.setOptions({
+            breaks: true,
+            gfm: true,
+            headerIds: true,
+            mangle: false
+        });
+
+        // Function to render markdown content
+        function renderMarkdown() {
+            const markdownContainer = document.getElementById('markdown-content');
+            if (markdownContainer) {
+                try {
+                    // Render markdown to HTML
+                    const htmlContent = marked.parse(markdownContent);
+                    markdownContainer.innerHTML = htmlContent;
+                    
+                    // Trigger MathJax to process the new content
+                    if (window.MathJax) {
+                        MathJax.typesetPromise([markdownContainer]).catch((err) => {
+                            console.error('MathJax error:', err);
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error rendering markdown:', error);
+                    markdownContainer.innerHTML = '<p>Error rendering content. Please check the console for details.</p>';
+                }
+            }
+        }
+
+        // Load markdown content when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            renderMarkdown();
+            
+            // Mobile navigation toggle
+            const navToggle = document.querySelector('.nav__toggle');
+            const navMenu = document.querySelector('.nav__menu');
+            
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', function() {
+                    navMenu.classList.toggle('nav__menu--active');
+                    navToggle.classList.toggle('nav__toggle--active');
+                });
+            }
+        });
+
+        // Function to load markdown from external file (for future use)
+        async function loadMarkdownFromFile(filename) {
+            try {
+                const response = await fetch(filename);
+                const markdown = await response.text();
+                return markdown;
+            } catch (error) {
+                console.error('Error loading markdown file:', error);
+                return null;
+            }
+        }
+    </script>
+</body>
+</html>

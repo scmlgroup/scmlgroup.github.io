@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Upcoming events and workshops hosted by the SCML Group">
+    <title>Events - SCML Group</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav__container">
+            <div class="nav__logo">
+                <a href="../index.html" class="nav__logo-link">
+                    <span class="nav__logo-text">SCML</span>
+                </a>
+            </div>
+            <button class="nav__toggle" aria-label="Toggle navigation menu">
+                <span class="nav__toggle-line"></span>
+                <span class="nav__toggle-line"></span>
+                <span class="nav__toggle-line"></span>
+            </button>
+            <ul class="nav__menu">
+                <li class="nav__item">
+                    <a href="../index.html" class="nav__link">Home</a>
+                </li>
+                <li class="nav__item">
+                    <a href="index.html" class="nav__link nav__link--active">Events</a>
+                </li>
+                <li class="nav__item">
+                    <a href="../blog/index.html" class="nav__link">Blog</a>
+                </li>
+                <li class="nav__item">
+                    <a href="../members/index.html" class="nav__link">Members</a>
+                </li>
+                <li class="nav__item">
+                    <a href="../gallery/index.html" class="nav__link">Gallery</a>
+                </li>
+                <li class="nav__item">
+                    <a href="../about-contact.html" class="nav__link">About & Contact</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Page Header -->
+        <section class="page-header">
+            <div class="container">
+                <h1 class="page-header__title">Events</h1>
+                <p class="page-header__subtitle">Join us for workshops, seminars, and conferences on cutting-edge research in AI and machine learning.</p>
+            </div>
+        </section>
+
+        <!-- Events Filter -->
+        <section class="events-filter">
+            <div class="container">
+                <div class="events-filter__controls">
+                    <div class="events-filter__group">
+                        <label for="category-filter" class="events-filter__label">Category:</label>
+                        <select id="category-filter" class="events-filter__select">
+                            <option value="">All Categories</option>
+                            <option value="workshop">Workshops</option>
+                            <option value="seminar">Seminars</option>
+                            <option value="conference">Conferences</option>
+                            <option value="lecture">Lectures</option>
+                        </select>
+                    </div>
+                    <div class="events-filter__group">
+                        <label for="date-filter" class="events-filter__label">Sort by:</label>
+                        <select id="date-filter" class="events-filter__select">
+                            <option value="date-asc">Date (Earliest First)</option>
+                            <option value="date-desc">Date (Latest First)</option>
+                            <option value="name">Name (A-Z)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Events Listing -->
+        <section class="events-listing">
+            <div class="container">
+                <div class="events-listing__grid" id="events-grid">
+                    <article class="event-card event-card--large" data-category="workshop" data-date="2024-12-15" data-title="Machine Learning Workshop">
+                        <div class="event-card__date">
+                            <span class="event-card__day">15</span>
+                            <span class="event-card__month">Dec</span>
+                        </div>
+                        <div class="event-card__content">
+                            <div class="event-card__meta">
+                                <span class="event-card__category">Workshop</span>
+                                <span class="event-card__time">9:00 AM - 5:00 PM</span>
+                            </div>
+                            <h3 class="event-card__title">Machine Learning Workshop</h3>
+                            <p class="event-card__description">Hands-on workshop covering the latest developments in deep learning and neural networks. Participants will work with real datasets and implement state-of-the-art algorithms.</p>
+                            <div class="event-card__location">
+                                <strong>Location:</strong> Research Building, Room 301
+                            </div>
+                            <div class="event-card__actions">
+                                <a href="event-detail.html" class="btn btn--primary">Learn More</a>
+                                <a href="#" class="btn btn--secondary">Register</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="event-card event-card--large" data-category="seminar" data-date="2024-12-22" data-title="AI Research Seminar">
+                        <div class="event-card__date">
+                            <span class="event-card__day">22</span>
+                            <span class="event-card__month">Dec</span>
+                        </div>
+                        <div class="event-card__content">
+                            <div class="event-card__meta">
+                                <span class="event-card__category">Seminar</span>
+                                <span class="event-card__time">2:00 PM - 4:00 PM</span>
+                            </div>
+                            <h3 class="event-card__title">AI Research Seminar</h3>
+                            <p class="event-card__description">Guest speaker presentation on advances in natural language processing and AI ethics. Dr. Sarah Chen from Stanford University will share her latest research findings.</p>
+                            <div class="event-card__location">
+                                <strong>Location:</strong> Conference Hall A
+                            </div>
+                            <div class="event-card__actions">
+                                <a href="event-detail.html" class="btn btn--primary">Learn More</a>
+                                <a href="#" class="btn btn--secondary">Register</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="event-card event-card--large" data-category="conference" data-date="2025-01-05" data-title="Computational Intelligence Conference">
+                        <div class="event-card__date">
+                            <span class="event-card__day">05</span>
+                            <span class="event-card__month">Jan</span>
+                        </div>
+                        <div class="event-card__content">
+                            <div class="event-card__meta">
+                                <span class="event-card__category">Conference</span>
+                                <span class="event-card__time">9:00 AM - 6:00 PM</span>
+                            </div>
+                            <h3 class="event-card__title">Computational Intelligence Conference</h3>
+                            <p class="event-card__description">Annual conference showcasing the latest research in soft computing methodologies. Features keynote speakers, paper presentations, and networking opportunities.</p>
+                            <div class="event-card__location">
+                                <strong>Location:</strong> University Convention Center
+                            </div>
+                            <div class="event-card__actions">
+                                <a href="event-detail.html" class="btn btn--primary">Learn More</a>
+                                <a href="#" class="btn btn--secondary">Register</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="event-card event-card--large" data-category="lecture" data-date="2025-01-12" data-title="Introduction to Federated Learning">
+                        <div class="event-card__date">
+                            <span class="event-card__day">12</span>
+                            <span class="event-card__month">Jan</span>
+                        </div>
+                        <div class="event-card__content">
+                            <div class="event-card__meta">
+                                <span class="event-card__category">Lecture</span>
+                                <span class="event-card__time">3:00 PM - 4:30 PM</span>
+                            </div>
+                            <h3 class="event-card__title">Introduction to Federated Learning</h3>
+                            <p class="event-card__description">An introductory lecture on federated learning, covering its principles, applications, and challenges in preserving privacy while enabling collaborative learning.</p>
+                            <div class="event-card__location">
+                                <strong>Location:</strong> Lecture Hall B
+                            </div>
+                            <div class="event-card__actions">
+                                <a href="event-detail.html" class="btn btn--primary">Learn More</a>
+                                <a href="#" class="btn btn--secondary">Register</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="event-card event-card--large" data-category="workshop" data-date="2025-01-20" data-title="Computer Vision with Deep Learning">
+                        <div class="event-card__date">
+                            <span class="event-card__day">20</span>
+                            <span class="event-card__month">Jan</span>
+                        </div>
+                        <div class="event-card__content">
+                            <div class="event-card__meta">
+                                <span class="event-card__category">Workshop</span>
+                                <span class="event-card__time">10:00 AM - 4:00 PM</span>
+                            </div>
+                            <h3 class="event-card__title">Computer Vision with Deep Learning</h3>
+                            <p class="event-card__description">Practical workshop on implementing computer vision solutions using deep learning frameworks. Participants will build and train neural networks for image classification.</p>
+                            <div class="event-card__location">
+                                <strong>Location:</strong> Computer Lab 2
+                            </div>
+                            <div class="event-card__actions">
+                                <a href="event-detail.html" class="btn btn--primary">Learn More</a>
+                                <a href="#" class="btn btn--secondary">Register</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="event-card event-card--large" data-category="seminar" data-date="2025-01-28" data-title="Explainable AI: Methods and Applications">
+                        <div class="event-card__date">
+                            <span class="event-card__day">28</span>
+                            <span class="event-card__month">Jan</span>
+                        </div>
+                        <div class="event-card__content">
+                            <div class="event-card__meta">
+                                <span class="event-card__category">Seminar</span>
+                                <span class="event-card__time">1:00 PM - 3:00 PM</span>
+                            </div>
+                            <h3 class="event-card__title">Explainable AI: Methods and Applications</h3>
+                            <p class="event-card__description">Seminar on explainable AI techniques and their importance in building trustworthy machine learning systems. Case studies and practical examples will be discussed.</p>
+                            <div class="event-card__location">
+                                <strong>Location:</strong> Seminar Room 1
+                            </div>
+                            <div class="event-card__actions">
+                                <a href="event-detail.html" class="btn btn--primary">Learn More</a>
+                                <a href="#" class="btn btn--secondary">Register</a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- No Results Message -->
+                <div id="no-results" class="events-listing__no-results" style="display: none;">
+                    <p>No events match your current filters. Try adjusting your selection.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__grid">
+                <div class="footer__section">
+                    <h3 class="footer__title">SCML Group</h3>
+                    <p class="footer__description">
+                        Advancing research in Soft Computing and Machine Learning through innovation and collaboration.
+                    </p>
+                </div>
+                <div class="footer__section">
+                    <h3 class="footer__title">Quick Links</h3>
+                    <ul class="footer__links">
+                        <li><a href="index.html" class="footer__link">Events</a></li>
+                        <li><a href="../blog/index.html" class="footer__link">Blog</a></li>
+                        <li><a href="../members/index.html" class="footer__link">Members</a></li>
+                        <li><a href="../gallery/index.html" class="footer__link">Gallery</a></li>
+                        <li><a href="../about-contact.html" class="footer__link">About & Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer__section">
+                    <h3 class="footer__title">Contact</h3>
+                    <p class="footer__contact">
+                        Email: <a href="mailto:info@scml-group.org" class="footer__link">info@scml-group.org</a><br>
+                        Address: Research Building, University Campus
+                    </p>
+                </div>
+                <div class="footer__section">
+                    <h3 class="footer__title">Follow Us</h3>
+                    <div class="footer__social">
+                        <a href="#" class="footer__social-link" aria-label="Twitter">
+                            <span class="footer__social-icon">𝕏</span>
+                        </a>
+                        <a href="#" class="footer__social-link" aria-label="LinkedIn">
+                            <span class="footer__social-icon">in</span>
+                        </a>
+                        <a href="#" class="footer__social-link" aria-label="GitHub">
+                            <span class="footer__social-icon">GitHub</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__copyright">&copy; 2024 SCML Group. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Event Filters -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile Navigation Toggle
+            const navToggle = document.querySelector('.nav__toggle');
+            const navMenu = document.querySelector('.nav__menu');
+
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', function() {
+                    navMenu.classList.toggle('active');
+                    navToggle.classList.toggle('active');
+                });
+            }
+
+            // Event Filters
+            const categoryFilter = document.getElementById('category-filter');
+            const dateFilter = document.getElementById('date-filter');
+            const eventsGrid = document.getElementById('events-grid');
+            const noResults = document.getElementById('no-results');
+            const eventCards = document.querySelectorAll('.event-card');
+
+            function filterAndSortEvents() {
+                const selectedCategory = categoryFilter.value;
+                const selectedSort = dateFilter.value;
+
+                // Reset all cards to visible first
+                eventCards.forEach(card => {
+                    card.style.display = 'block';
+                });
+
+                // Filter events by category
+                let filteredEvents = Array.from(eventCards);
+
+                if (selectedCategory && selectedCategory !== '') {
+                    filteredEvents = filteredEvents.filter(card => {
+                        const cardCategory = card.dataset.category;
+                        return cardCategory === selectedCategory;
+                    });
+
+                    // Hide cards that don't match the filter
+                    eventCards.forEach(card => {
+                        if (card.dataset.category !== selectedCategory) {
+                            card.style.display = 'none';
+                        }
+                    });
+                }
+
+                // Show/hide no results message
+                if (filteredEvents.length === 0) {
+                    noResults.style.display = 'block';
+                } else {
+                    noResults.style.display = 'none';
+                }
+
+                // Sort events
+                filteredEvents.sort((a, b) => {
+                    switch (selectedSort) {
+                        case 'date-asc':
+                            return new Date(a.dataset.date) - new Date(b.dataset.date);
+                        case 'date-desc':
+                            return new Date(b.dataset.date) - new Date(a.dataset.date);
+                        case 'name':
+                            return a.dataset.title.localeCompare(b.dataset.title);
+                        default:
+                            return 0;
+                    }
+                });
+
+                // Reorder events in the DOM
+                filteredEvents.forEach(card => {
+                    eventsGrid.appendChild(card);
+                });
+            }
+
+            // Add event listeners
+            categoryFilter.addEventListener('change', filterAndSortEvents);
+            dateFilter.addEventListener('change', filterAndSortEvents);
+
+            // Initialize filters
+            filterAndSortEvents();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Page not found - SCML Group">
+    <title>Page Not Found - SCML Group</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <style>
+        .error-page {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: var(--spacing-xxl) 0;
+        }
+        
+        .error-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .error-code {
+            font-size: 8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            line-height: 1;
+            margin-bottom: var(--spacing-md);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .error-title {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+            color: var(--color-text-primary);
+        }
+        
+        .error-message {
+            font-size: var(--font-size-lg);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-xl);
+            line-height: 1.6;
+        }
+        
+        .error-actions {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .quick-links {
+            margin-top: var(--spacing-xxl);
+            padding: var(--spacing-xl);
+            background: var(--color-background-light);
+            border-radius: var(--border-radius-lg);
+        }
+        
+        .quick-links h3 {
+            margin-bottom: var(--spacing-lg);
+            color: var(--color-text-primary);
+        }
+        
+        .quick-links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-md);
+        }
+        
+        .quick-link {
+            display: block;
+            padding: var(--spacing-md);
+            background: white;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            color: var(--color-text-primary);
+            border: 1px solid var(--color-border);
+            transition: all 0.3s ease;
+        }
+        
+        .quick-link:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--color-primary);
+        }
+        
+        .quick-link h4 {
+            margin-bottom: var(--spacing-xs);
+            color: var(--color-primary);
+        }
+        
+        .quick-link p {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            margin: 0;
+        }
+        
+        @media (max-width: 768px) {
+            .error-code {
+                font-size: 6rem;
+            }
+            
+            .error-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .quick-links-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav__container">
+            <div class="nav__logo">
+                <a href="index.html" class="nav__logo-link">
+                    <span class="nav__logo-text">SCML</span>
+                </a>
+            </div>
+            <button class="nav__toggle" aria-label="Toggle navigation menu">
+                <span class="nav__toggle-line"></span>
+                <span class="nav__toggle-line"></span>
+                <span class="nav__toggle-line"></span>
+            </button>
+            <ul class="nav__menu">
+                <li class="nav__item">
+                    <a href="index.html" class="nav__link">Home</a>
+                </li>
+                <li class="nav__item">
+                    <a href="events/index.html" class="nav__link">Events</a>
+                </li>
+                <li class="nav__item">
+                    <a href="blog/index.html" class="nav__link">Blog</a>
+                </li>
+                <li class="nav__item">
+                    <a href="members/index.html" class="nav__link">Members</a>
+                </li>
+                <li class="nav__item">
+                    <a href="gallery/index.html" class="nav__link">Gallery</a>
+                </li>
+                <li class="nav__item">
+                    <a href="about-contact.html" class="nav__link">About & Contact</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+        <section class="error-page">
+            <div class="container">
+                <div class="error-content">
+                    <div class="error-code">404</div>
+                    <h1 class="error-title">Page Not Found</h1>
+                    <p class="error-message">
+                        Sorry, the page you're looking for doesn't exist. It might have been moved, deleted, or you entered the wrong URL.
+                    </p>
+                    <div class="error-actions">
+                        <a href="index.html" class="btn btn--primary">Go Home</a>
+                        <a href="about-contact.html" class="btn btn--secondary">Contact Us</a>
+                    </div>
+                </div>
+                
+                <div class="quick-links">
+                    <h3>Popular Pages</h3>
+                    <div class="quick-links-grid">
+                        <a href="events/index.html" class="quick-link">
+                            <h4>Events</h4>
+                            <p>View upcoming workshops, seminars, and conferences</p>
+                        </a>
+                        <a href="blog/index.html" class="quick-link">
+                            <h4>Blog</h4>
+                            <p>Read our latest research articles and insights</p>
+                        </a>
+                        <a href="members/index.html" class="quick-link">
+                            <h4>Members</h4>
+                            <p>Meet our research team and collaborators</p>
+                        </a>
+                        <a href="gallery/index.html" class="quick-link">
+                            <h4>Gallery</h4>
+                            <p>Browse photos from our events and activities</p>
+                        </a>
+                        <a href="about-contact.html" class="quick-link">
+                            <h4>About Us</h4>
+                            <p>Learn more about our research group</p>
+                        </a>
+                        <a href="archive/index.html" class="quick-link">
+                            <h4>Archive</h4>
+                            <p>Access past events and resources</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__grid">
+                <div class="footer__section">
+                    <h3 class="footer__title">SCML Group</h3>
+                    <p class="footer__description">
+                        Advancing research in Soft Computing and Machine Learning through innovation and collaboration.
+                    </p>
+                </div>
+                <div class="footer__section">
+                    <h3 class="footer__title">Quick Links</h3>
+                    <ul class="footer__links">
+                        <li><a href="events/index.html" class="footer__link">Events</a></li>
+                        <li><a href="blog/index.html" class="footer__link">Blog</a></li>
+                        <li><a href="members/index.html" class="footer__link">Members</a></li>
+                        <li><a href="gallery/index.html" class="footer__link">Gallery</a></li>
+                        <li><a href="about-contact.html" class="footer__link">About & Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer__section">
+                    <h3 class="footer__title">Contact</h3>
+                    <p class="footer__contact">
+                        Email: <a href="mailto:info@scml-group.org" class="footer__link">info@scml-group.org</a><br>
+                        Address: Research Building, University Campus
+                    </p>
+                </div>
+                <div class="footer__section">
+                    <h3 class="footer__title">Follow Us</h3>
+                    <div class="footer__social">
+                        <a href="#" class="footer__social-link" aria-label="Twitter">
+                            <span class="footer__social-icon">𝕏</span>
+                        </a>
+                        <a href="#" class="footer__social-link" aria-label="LinkedIn">
+                            <span class="footer__social-icon">in</span>
+                        </a>
+                        <a href="#" class="footer__social-link" aria-label="GitHub">
+                            <span class="footer__social-icon">GitHub</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__copyright">&copy; 2024 SCML Group. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile Navigation Toggle
+            const navToggle = document.querySelector('.nav__toggle');
+            const navMenu = document.querySelector('.nav__menu');
+            
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', function() {
+                    navMenu.classList.toggle('active');
+                    navToggle.classList.toggle('active');
+                });
+            }
+        });
+    </script>
+</body>
+</html> 

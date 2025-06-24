@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Photo gallery from SCML Group events and activities">
+    <title>Photo Gallery - SCML Group</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <style>
+        /* Gallery Popup Styles */
+        .gallery-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-popup.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .gallery-popup__container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gallery-popup__content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            text-align: center;
+        }
+
+        .gallery-popup__image {
+            max-width: 100%;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .gallery-popup__info {
+            margin-top: 20px;
+            color: white;
+        }
+
+        .gallery-popup__title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .gallery-popup__description {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+
+        .gallery-popup__counter {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .gallery-popup__close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            z-index: 1001;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.3s ease;
+        }
+
+        .gallery-popup__close:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .gallery-popup__nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.3s ease;
+        }
+
+        .gallery-popup__nav:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .gallery-popup__nav--prev {
+            left: 30px;
+        }
+
+        .gallery-popup__nav--next {
+            right: 30px;
+        }
+
+        .gallery-popup__nav:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .gallery-popup__thumbnails {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            max-width: 80%;
+            overflow-x: auto;
+            padding: 10px;
+        }
+
+        .gallery-popup__thumbnail {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 4px;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .gallery-popup__thumbnail:hover,
+        .gallery-popup__thumbnail.active {
+            opacity: 1;
+            border-color: var(--color-primary);
+        }
+
+        /* Event Gallery Styles */
+        .event-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-xl);
+        }
+
+        .event-gallery__item {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .event-gallery__item:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .event-gallery__image {
+            width: 100%;
+            height: 200px;
+            background: var(--color-background-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .event-gallery__placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-align: center;
+            padding: var(--spacing-md);
+        }
+
+        .event-gallery__content {
+            padding: var(--spacing-lg);
+        }
+
+        .event-gallery__title {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+            color: var(--color-text-primary);
+        }
+
+        .event-gallery__date {
+            font-size: var(--font-size-sm);
+            color: var(--color-primary);
+            margin-bottom: var(--spacing-sm);
+            font-weight: 500;
+        }
+
+        .event-gallery__description {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-md);
+            line-height: 1.5;
+        }
+
+        .event-gallery__stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+        }
+
+        .event-gallery__photo-count {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+
+        .event-gallery__photo-count::before {
+            content: "📷";
+            font-size: 1rem;
+        }
+
+        .event-gallery__view-btn {
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .event-gallery__view-btn:hover {
+            color: var(--color-primary-dark);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .gallery-popup__nav {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+
+            .gallery-popup__nav--prev {
+                left: 15px;
+            }
+
+            .gallery-popup__nav--next {
+                right: 15px;
+            }
+
+            .gallery-popup__close {
+                top: 15px;
+                right: 15px;
+                width: 40px;
+                height: 40px;
+                font-size: 1.5rem;
+            }
+
+            .gallery-popup__thumbnails {
+                bottom: 10px;
+                max-width: 90%;
+            }
+
+            .gallery-popup__thumbnail {
+                width: 50px;
+                height: 50px;
+            }
+
+            .event-gallery {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .gallery-popup__image {
+                max-height: 70vh;
+            }
+
+            .gallery-popup__title {
+                font-size: 1.2rem;
+            }
+
+            .gallery-popup__description {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav__container">
+            <div class="nav__logo">
+                <a href="../index.html" class="nav__logo-link">
+                    <span class="nav__logo-text">SCML</span>
+                </a>
+            </div>
+            <button class="nav__toggle" aria-label="Toggle navigation menu">
+                <span class="nav__toggle-line"></span>
+                <span class="nav__toggle-line"></span>
+                <span class="nav__toggle-line"></span>
+            </button>
+            <ul class="nav__menu">
+                <li class="nav__item">
+                    <a href="../index.html" class="nav__link">Home</a>
+                </li>
+                <li class="nav__item">
+                    <a href="../events/index.html" class="nav__link">Events</a>
+                </li>
+                <li class="nav__item">
+                    <a href="../blog/index.html" class="nav__link">Blog</a>
+                </li>
+                <li class="nav__item">
+                    <a href="../members/index.html" class="nav__link">Members</a>
+                </li>
+                <li class="nav__item">
+                    <a href="index.html" class="nav__link nav__link--active">Gallery</a>
+                </li>
+                <li class="nav__item">
+                    <a href="../about-contact.html" class="nav__link">About & Contact</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Page Header -->
+        <section class="page-header">
+            <div class="container">
+                <h1 class="page-header__title">Photo Gallery</h1>
+                <p class="page-header__subtitle">Capturing moments from our events, workshops, and research activities</p>
+            </div>
+        </section>
+
+        <!-- Event Gallery -->
+        <section class="event-gallery-section">
+            <div class="container">
+                <h2 class="section-title">Event Galleries</h2>
+                <div class="event-gallery" id="eventGallery">
+                    <!-- Event galleries will be populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Filter -->
+        <section class="gallery-filter">
+            <div class="container">
+                <div class="gallery-filter__controls">
+                    <button class="gallery-filter__btn gallery-filter__btn--active" data-filter="all">All Photos</button>
+                    <button class="gallery-filter__btn" data-filter="workshops">Workshops</button>
+                    <button class="gallery-filter__btn" data-filter="conferences">Conferences</button>
+                    <button class="gallery-filter__btn" data-filter="seminars">Seminars</button>
+                    <button class="gallery-filter__btn" data-filter="team">Team</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Photo Gallery -->
+        <section class="photo-gallery">
+            <div class="container">
+                <div class="photo-gallery__grid" id="photoGrid">
+                    <!-- Photos will be populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Gallery Popup -->
+    <div class="gallery-popup" id="galleryPopup">
+        <button class="gallery-popup__close" id="closePopup">&times;</button>
+        <div class="gallery-popup__container">
+            <button class="gallery-popup__nav gallery-popup__nav--prev" id="prevBtn">&lt;</button>
+            <button class="gallery-popup__nav gallery-popup__nav--next" id="nextBtn">&gt;</button>
+            
+            <div class="gallery-popup__content">
+                <img class="gallery-popup__image" id="popupImage" src="" alt="">
+                <div class="gallery-popup__info">
+                    <h3 class="gallery-popup__title" id="popupTitle"></h3>
+                    <p class="gallery-popup__description" id="popupDescription"></p>
+                    <p class="gallery-popup__counter" id="popupCounter"></p>
+                </div>
+            </div>
+            
+            <div class="gallery-popup__thumbnails" id="popupThumbnails">
+                <!-- Thumbnails will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__grid">
+                <div class="footer__section">
+                    <h3 class="footer__title">SCML Group</h3>
+                    <p class="footer__description">
+                        Advancing research in Soft Computing and Machine Learning through innovation and collaboration.
+                    </p>
+                </div>
+                <div class="footer__section">
+                    <h3 class="footer__title">Quick Links</h3>
+                    <ul class="footer__links">
+                        <li><a href="../events/index.html" class="footer__link">Events</a></li>
+                        <li><a href="../blog/index.html" class="footer__link">Blog</a></li>
+                        <li><a href="../members/index.html" class="footer__link">Members</a></li>
+                        <li><a href="index.html" class="footer__link">Gallery</a></li>
+                        <li><a href="../about-contact.html" class="footer__link">About & Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer__section">
+                    <h3 class="footer__title">Contact</h3>
+                    <p class="footer__contact">
+                        Email: <a href="mailto:info@scml-group.org" class="footer__link">info@scml-group.org</a><br>
+                        Address: Research Building, University Campus
+                    </p>
+                </div>
+                <div class="footer__section">
+                    <h3 class="footer__title">Follow Us</h3>
+                    <div class="footer__social">
+                        <a href="#" class="footer__social-link" aria-label="Twitter">
+                            <span class="footer__social-icon">𝕏</span>
+                        </a>
+                        <a href="#" class="footer__social-link" aria-label="LinkedIn">
+                            <span class="footer__social-icon">in</span>
+                        </a>
+                        <a href="#" class="footer__social-link" aria-label="GitHub">
+                            <span class="footer__social-icon">GitHub</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__copyright">&copy; 2024 SCML Group. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Event gallery data
+        const eventGalleries = [
+            {
+                id: 'deep-learning-workshop',
+                title: 'Deep Learning Workshop',
+                date: 'December 15, 2024',
+                description: 'Hands-on workshop covering neural networks and deep learning fundamentals.',
+                category: 'workshops',
+                photoCount: 12,
+                images: [
+                    { src: '../assets/images/events/deep-learning-1.jpg', alt: 'Workshop participants', title: 'Participants working on neural networks' },
+                    { src: '../assets/images/events/deep-learning-2.jpg', alt: 'Code demonstration', title: 'Live coding demonstration' },
+                    { src: '../assets/images/events/deep-learning-3.jpg', alt: 'Group discussion', title: 'Group discussion session' },
+                    { src: '../assets/images/events/deep-learning-4.jpg', alt: 'Presentation', title: 'Keynote presentation' },
+                    { src: '../assets/images/events/deep-learning-5.jpg', alt: 'Hands-on session', title: 'Practical implementation' },
+                    { src: '../assets/images/events/deep-learning-6.jpg', alt: 'Networking', title: 'Networking break' },
+                    { src: '../assets/images/events/deep-learning-7.jpg', alt: 'Q&A session', title: 'Question and answer session' },
+                    { src: '../assets/images/events/deep-learning-8.jpg', alt: 'Certificate ceremony', title: 'Certificate distribution' },
+                    { src: '../assets/images/events/deep-learning-9.jpg', alt: 'Team photo', title: 'Group photo with participants' },
+                    { src: '../assets/images/events/deep-learning-10.jpg', alt: 'Workshop setup', title: 'Workshop venue setup' },
+                    { src: '../assets/images/events/deep-learning-11.jpg', alt: 'Materials', title: 'Workshop materials and resources' },
+                    { src: '../assets/images/events/deep-learning-12.jpg', alt: 'Closing ceremony', title: 'Workshop closing ceremony' }
+                ]
+            },
+            {
+                id: 'ai-conference',
+                title: 'AI Research Conference',
+                date: 'November 28, 2024',
+                description: 'Annual conference showcasing the latest advances in artificial intelligence research.',
+                category: 'conferences',
+                photoCount: 15,
+                images: [
+                    { src: '../assets/images/events/ai-conference-1.jpg', alt: 'Conference opening', title: 'Conference opening ceremony' },
+                    { src: '../assets/images/events/ai-conference-2.jpg', alt: 'Keynote speaker', title: 'Keynote presentation' },
+                    { src: '../assets/images/events/ai-conference-3.jpg', alt: 'Panel discussion', title: 'Expert panel discussion' },
+                    { src: '../assets/images/events/ai-conference-4.jpg', alt: 'Poster session', title: 'Research poster presentations' },
+                    { src: '../assets/images/events/ai-conference-5.jpg', alt: 'Networking', title: 'Networking session' },
+                    { src: '../assets/images/events/ai-conference-6.jpg', alt: 'Workshop session', title: 'Interactive workshop' },
+                    { src: '../assets/images/events/ai-conference-7.jpg', alt: 'Award ceremony', title: 'Best paper awards' },
+                    { src: '../assets/images/events/ai-conference-8.jpg', alt: 'Coffee break', title: 'Coffee and refreshments' },
+                    { src: '../assets/images/events/ai-conference-9.jpg', alt: 'Discussion groups', title: 'Breakout discussion groups' },
+                    { src: '../assets/images/events/ai-conference-10.jpg', alt: 'Industry showcase', title: 'Industry partner showcase' },
+                    { src: '../assets/images/events/ai-conference-11.jpg', alt: 'Student presentations', title: 'Student research presentations' },
+                    { src: '../assets/images/events/ai-conference-12.jpg', alt: 'Closing remarks', title: 'Conference closing remarks' },
+                    { src: '../assets/images/events/ai-conference-13.jpg', alt: 'Group photo', title: 'Conference group photo' },
+                    { src: '../assets/images/events/ai-conference-14.jpg', alt: 'Venue', title: 'Conference venue' },
+                    { src: '../assets/images/events/ai-conference-15.jpg', alt: 'Materials', title: 'Conference materials and proceedings' }
+                ]
+            },
+            {
+                id: 'nlp-seminar',
+                title: 'Natural Language Processing Seminar',
+                date: 'November 15, 2024',
+                description: 'Guest speaker presentation on advances in transformer models and NLP.',
+                category: 'seminars',
+                photoCount: 8,
+                images: [
+                    { src: '../assets/images/events/nlp-seminar-1.jpg', alt: 'Seminar setup', title: 'Seminar room setup' },
+                    { src: '../assets/images/events/nlp-seminar-2.jpg', alt: 'Guest speaker', title: 'Guest speaker presentation' },
+                    { src: '../assets/images/events/nlp-seminar-3.jpg', alt: 'Audience', title: 'Attentive audience' },
+                    { src: '../assets/images/events/nlp-seminar-4.jpg', alt: 'Q&A session', title: 'Question and answer session' },
+                    { src: '../assets/images/events/nlp-seminar-5.jpg', alt: 'Discussion', title: 'Interactive discussion' },
+                    { src: '../assets/images/events/nlp-seminar-6.jpg', alt: 'Networking', title: 'Post-seminar networking' },
+                    { src: '../assets/images/events/nlp-seminar-7.jpg', alt: 'Materials', title: 'Seminar materials' },
+                    { src: '../assets/images/events/nlp-seminar-8.jpg', alt: 'Group photo', title: 'Seminar group photo' }
+                ]
+            },
+            {
+                id: 'team-meeting',
+                title: 'SCML Team Meeting',
+                date: 'November 20, 2024',
+                description: 'Weekly team meeting discussing research progress and upcoming projects.',
+                category: 'team',
+                photoCount: 6,
+                images: [
+                    { src: '../assets/images/events/team-meeting-1.jpg', alt: 'Team discussion', title: 'Team discussion session' },
+                    { src: '../assets/images/events/team-meeting-2.jpg', alt: 'Presentation', title: 'Research presentation' },
+                    { src: '../assets/images/events/team-meeting-3.jpg', alt: 'Planning', title: 'Project planning' },
+                    { src: '../assets/images/events/team-meeting-4.jpg', alt: 'Collaboration', title: 'Collaborative work session' },
+                    { src: '../assets/images/events/team-meeting-5.jpg', alt: 'Break', title: 'Meeting break' },
+                    { src: '../assets/images/events/team-meeting-6.jpg', alt: 'Team photo', title: 'Team group photo' }
+                ]
+            }
+        ];
+
+        // Current gallery state
+        let currentGallery = null;
+        let currentImageIndex = 0;
+
+        // DOM elements
+        const eventGalleryContainer = document.getElementById('eventGallery');
+        const photoGrid = document.getElementById('photoGrid');
+        const galleryPopup = document.getElementById('galleryPopup');
+        const popupImage = document.getElementById('popupImage');
+        const popupTitle = document.getElementById('popupTitle');
+        const popupDescription = document.getElementById('popupDescription');
+        const popupCounter = document.getElementById('popupCounter');
+        const popupThumbnails = document.getElementById('popupThumbnails');
+        const closePopup = document.getElementById('closePopup');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        // Initialize gallery
+        function initGallery() {
+            renderEventGalleries();
+            renderPhotoGrid();
+            setupEventListeners();
+        }
+
+        // Render event galleries
+        function renderEventGalleries() {
+            eventGalleryContainer.innerHTML = eventGalleries.map(event => `
+                <div class="event-gallery__item" data-event-id="${event.id}">
+                    <div class="event-gallery__image">
+                        <div class="event-gallery__placeholder">
+                            ${event.title}
+                        </div>
+                    </div>
+                    <div class="event-gallery__content">
+                        <h3 class="event-gallery__title">${event.title}</h3>
+                        <p class="event-gallery__date">${event.date}</p>
+                        <p class="event-gallery__description">${event.description}</p>
+                        <div class="event-gallery__stats">
+                            <span class="event-gallery__photo-count">${event.photoCount} photos</span>
+                            <a href="#" class="event-gallery__view-btn">View Gallery</a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render photo grid
+        function renderPhotoGrid() {
+            const allPhotos = eventGalleries.flatMap(event => 
+                event.images.map((image, index) => ({
+                    ...image,
+                    eventId: event.id,
+                    eventTitle: event.title,
+                    eventDate: event.date,
+                    eventDescription: event.description,
+                    category: event.category
+                }))
+            );
+
+            photoGrid.innerHTML = allPhotos.map((photo, index) => `
+                <div class="photo-item" data-category="${photo.category}" data-event-id="${photo.eventId}" data-photo-index="${index}">
+                    <div class="photo-item__image">
+                        <div class="photo-item__placeholder">
+                            <span class="photo-item__placeholder-text">${photo.title}</span>
+                        </div>
+                    </div>
+                    <div class="photo-item__caption">
+                        <h3 class="photo-item__title">${photo.title}</h3>
+                        <p class="photo-item__date">${photo.eventDate}</p>
+                        <p class="photo-item__description">${photo.eventDescription}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Event gallery clicks
+            eventGalleryContainer.addEventListener('click', (e) => {
+                const eventItem = e.target.closest('.event-gallery__item');
+                if (eventItem) {
+                    const eventId = eventItem.dataset.eventId;
+                    openEventGallery(eventId);
+                }
+            });
+
+            // Photo grid clicks
+            photoGrid.addEventListener('click', (e) => {
+                const photoItem = e.target.closest('.photo-item');
+                if (photoItem) {
+                    const eventId = photoItem.dataset.eventId;
+                    const photoIndex = parseInt(photoItem.dataset.photoIndex);
+                    openEventGallery(eventId, photoIndex);
+                }
+            });
+
+            // Popup controls
+            closePopup.addEventListener('click', closeGalleryPopup);
+            prevBtn.addEventListener('click', showPreviousImage);
+            nextBtn.addEventListener('click', showNextImage);
+
+            // Keyboard navigation
+            document.addEventListener('keydown', handleKeyboardNavigation);
+
+            // Click outside to close
+            galleryPopup.addEventListener('click', (e) => {
+                if (e.target === galleryPopup) {
+                    closeGalleryPopup();
+                }
+            });
+
+            // Filter buttons
+            document.querySelectorAll('.gallery-filter__btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const filter = e.target.dataset.filter;
+                    applyFilter(filter);
+                    
+                    // Update active button
+                    document.querySelectorAll('.gallery-filter__btn').forEach(b => b.classList.remove('gallery-filter__btn--active'));
+                    e.target.classList.add('gallery-filter__btn--active');
+                });
+            });
+        }
+
+        // Open event gallery
+        function openEventGallery(eventId, startIndex = 0) {
+            currentGallery = eventGalleries.find(event => event.id === eventId);
+            if (!currentGallery) return;
+
+            currentImageIndex = startIndex;
+            showImage(currentImageIndex);
+            galleryPopup.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Show image in popup
+        function showImage(index) {
+            if (!currentGallery || index < 0 || index >= currentGallery.images.length) return;
+
+            const image = currentGallery.images[index];
+            
+            // Use placeholder for now (replace with actual image paths)
+            popupImage.src = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600"><rect width="800" height="600" fill="%23f0f0f0"/><text x="400" y="300" text-anchor="middle" font-family="Arial" font-size="24" fill="%23666">${image.title}</text></svg>`;
+            popupImage.alt = image.alt;
+            popupTitle.textContent = image.title;
+            popupDescription.textContent = currentGallery.description;
+            popupCounter.textContent = `${index + 1} of ${currentGallery.images.length}`;
+
+            // Update navigation buttons
+            prevBtn.disabled = index === 0;
+            nextBtn.disabled = index === currentGallery.images.length - 1;
+
+            // Update thumbnails
+            renderThumbnails(index);
+        }
+
+        // Render thumbnails
+        function renderThumbnails(activeIndex) {
+            popupThumbnails.innerHTML = currentGallery.images.map((image, index) => `
+                <img 
+                    src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'><rect width='60' height='60' fill='%23f0f0f0'/><text x='30' y='35' text-anchor='middle' font-family='Arial' font-size='8' fill='%23666'>${index + 1}</text></svg>"
+                    alt="${image.alt}"
+                    class="gallery-popup__thumbnail ${index === activeIndex ? 'active' : ''}"
+                    data-index="${index}"
+                >
+            `).join('');
+
+            // Add thumbnail click listeners
+            popupThumbnails.querySelectorAll('.gallery-popup__thumbnail').forEach(thumb => {
+                thumb.addEventListener('click', () => {
+                    const index = parseInt(thumb.dataset.index);
+                    currentImageIndex = index;
+                    showImage(index);
+                });
+            });
+        }
+
+        // Navigation functions
+        function showPreviousImage() {
+            if (currentImageIndex > 0) {
+                currentImageIndex--;
+                showImage(currentImageIndex);
+            }
+        }
+
+        function showNextImage() {
+            if (currentGallery && currentImageIndex < currentGallery.images.length - 1) {
+                currentImageIndex++;
+                showImage(currentImageIndex);
+            }
+        }
+
+        // Close gallery popup
+        function closeGalleryPopup() {
+            galleryPopup.classList.remove('active');
+            document.body.style.overflow = '';
+            currentGallery = null;
+            currentImageIndex = 0;
+        }
+
+        // Handle keyboard navigation
+        function handleKeyboardNavigation(e) {
+            if (!galleryPopup.classList.contains('active')) return;
+
+            switch (e.key) {
+                case 'Escape':
+                    closeGalleryPopup();
+                    break;
+                case 'ArrowLeft':
+                    showPreviousImage();
+                    break;
+                case 'ArrowRight':
+                    showNextImage();
+                    break;
+            }
+        }
+
+        // Apply filter
+        function applyFilter(filter) {
+            const photoItems = document.querySelectorAll('.photo-item');
+            
+            photoItems.forEach(item => {
+                const category = item.dataset.category;
+                if (filter === 'all' || category === filter) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // Mobile navigation toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const navToggle = document.querySelector('.nav__toggle');
+            const navMenu = document.querySelector('.nav__menu');
+            
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', function() {
+                    navMenu.classList.toggle('active');
+                    navToggle.classList.toggle('active');
+                });
+            }
+
+            // Initialize gallery
+            initGallery();
+        });
+    </script>
+</body>
+</html>
