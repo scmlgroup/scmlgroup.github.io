@@ -1,6 +1,10 @@
 # SCML Group Website
 
-A modern, responsive website for the Soft Computing and Machine Learning Group (SCML) built with pure HTML and CSS.
+A modern, responsive website for the Soft Computing and Machine Learning Group (SCML) built with pure HTML, CSS, and JavaScript. The website showcases research activities, team members, events, and blog posts in an accessible and professional format.
+
+## 🌐 Live Site
+
+**Website**: [https://scmlgroup.github.io](https://scmlgroup.github.io)
 
 ## 🌟 Features
 
@@ -14,11 +18,18 @@ A modern, responsive website for the Soft Computing and Machine Learning Group (
 ### Pages & Sections
 - **Home Page**: Hero section, about preview, upcoming events, latest blog posts, featured members
 - **Events Page**: Event listings with filters, detailed event pages with agenda and speakers
-- **Blog Page**: Article listings with pagination, detailed blog posts with author information
+- **Blog Page**: Article listings with pagination, detailed blog posts with markdown support and MathJax
 - **Members Page**: Team directory with faculty, researchers, and students
 - **About & Contact Page**: Group information, research areas, timeline, contact form
 - **Archive Page**: Past events with collapsible details
 - **Photo Gallery**: Filterable image gallery with lightbox effect
+
+### Technical Features
+- **Markdown Support**: Blog posts render markdown content with syntax highlighting
+- **Mathematical Expressions**: MathJax integration for LaTeX math rendering
+- **Progressive Enhancement**: Works without JavaScript, enhanced with it
+- **Fast Loading**: Optimized CSS and minimal external dependencies
+- **Cross-browser Compatible**: Modern CSS features with fallbacks
 
 ### Accessibility & Performance
 - **WCAG 2.1 compliant** with proper ARIA labels and semantic markup
@@ -48,15 +59,21 @@ A modern, responsive website for the Soft Computing and Machine Learning Group (
 ## 📁 File Structure
 
 ```
-SCML.github.io/
+scmlgroup.github.io/
 ├── index.html                    # Home page
 ├── about-contact.html            # About & Contact page
+├── 404.html                      # Custom 404 error page
+├── robots.txt                    # Search engine directives
+├── sitemap.xml                   # XML sitemap for SEO
+├── server.py                     # Local development server
+├── DEPLOYMENT.md                 # Deployment instructions
+├── .gitignore                    # Git ignore rules
 ├── events/
 │   ├── index.html               # Events listing
 │   └── event-detail.html        # Event template
 ├── blog/
 │   ├── index.html               # Blog listing
-│   └── post.html                # Blog post template
+│   └── post.html                # Blog post with markdown support
 ├── members/
 │   └── index.html               # Members directory
 ├── archive/
@@ -69,23 +86,29 @@ SCML.github.io/
 └── README.md                    # This file
 ```
 
-## 🚀 Deployment
+## 🚀 Quick Start
 
-### Option 1: GitHub Pages (Recommended)
-1. Push this repository to GitHub
-2. Go to repository Settings > Pages
-3. Select source branch (usually `main` or `master`)
-4. Your site will be available at `https://username.github.io/SCML.github.io`
+### Local Development
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/scmlgroup/scmlgroup.github.io.git
+   cd scmlgroup.github.io
+   ```
 
-### Option 2: Any Web Server
-1. Upload all files to your web server
-2. Ensure the file structure is maintained
-3. The site will work immediately - no build process required
+2. **Start local server** (optional):
+   ```bash
+   python server.py
+   ```
+   Then visit `http://localhost:8000`
 
-### Option 3: Local Development
-1. Clone or download the repository
-2. Open `index.html` in your web browser
-3. All pages will work locally with relative links
+3. **Or open directly**:
+   - Open `index.html` in your web browser
+   - All pages work locally with relative links
+
+### Deployment
+The website is automatically deployed to GitHub Pages at [https://scmlgroup.github.io](https://scmlgroup.github.io).
+
+For detailed deployment instructions, see [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ## 🛠️ Customization
 
@@ -102,10 +125,27 @@ Edit the CSS variables in `assets/css/styles.css`:
 ```
 
 ### Adding Content
-- **Events**: Edit `events/index.html` and `events/event-detail.html`
-- **Blog Posts**: Edit `blog/index.html` and `blog/post.html`
-- **Team Members**: Edit `members/index.html`
-- **About Information**: Edit `about-contact.html`
+
+#### Blog Posts
+1. Edit `blog/post.html` to update the sample content
+2. The page supports markdown rendering with:
+   - Headers (`#`, `##`, `###`)
+   - Bold (`**text**`) and italic (`*text*`)
+   - Code blocks (``` ``` ```)
+   - Inline code (`code`)
+   - Lists (`- item` or `1. item`)
+   - Blockquotes (`> text`)
+   - Mathematical expressions with LaTeX
+
+#### Events
+- Edit `events/index.html` for event listings
+- Edit `events/event-detail.html` for individual event details
+
+#### Team Members
+- Edit `members/index.html` to update team information
+
+#### About Information
+- Edit `about-contact.html` for group information and contact details
 
 ### Adding Images
 1. Create an `assets/images/` directory
@@ -148,17 +188,55 @@ Edit the CSS variables in `assets/css/styles.css`:
 - Images should be compressed before adding
 - Consider using WebP format for better compression
 
+## 📊 SEO Features
+
+- **XML Sitemap**: Automatically generated for search engines
+- **Meta Tags**: Proper meta descriptions and Open Graph tags
+- **Structured Data**: JSON-LD markup for rich snippets
+- **Canonical URLs**: Prevents duplicate content issues
+- **Robots.txt**: Search engine crawling directives
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+1. **Markdown not rendering**:
+   - Check browser console for JavaScript errors
+   - Ensure CDN resources are loading (marked.js, MathJax)
+   - The page includes fallback rendering if external resources fail
+
+2. **Math expressions not displaying**:
+   - MathJax may take a moment to load
+   - Check for LaTeX syntax errors
+   - Ensure MathJax CDN is accessible
+
+3. **Styling issues**:
+   - Verify CSS file path is correct
+   - Check for CSS syntax errors
+   - Clear browser cache
+
 ## 📞 Support
 
 For questions or issues:
 - Check the HTML structure matches the examples
 - Ensure all CSS files are properly linked
 - Verify file paths are correct for your deployment
+- Review browser console for JavaScript errors
 
 ## 📄 License
 
 This project is open source and available under the MIT License.
 
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test locally
+5. Submit a pull request
+
 ---
 
-**Built with ❤️ for the SCML Group** 
+**Built with ❤️ for the SCML Group**
+
+*Last updated: December 2024* 
