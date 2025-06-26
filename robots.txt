@@ -2,16 +2,16 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://yourusername.github.io/SCML.github.io/sitemap.xml
+Sitemap: https://scmlgroup.github.io/sitemap.xml
 
 # Disallow development files
 Disallow: /.vscode/
 Disallow: /server.py
 Disallow: /README.md
-Disallow: /sitemap.xml
-Disallow: /robots.txt
+Disallow: /DEPLOYMENT.md
+Disallow: /.gitignore
 
-# Allow all other content
+# Allow all content directories
 Allow: /assets/
 Allow: /events/
 Allow: /blog/
